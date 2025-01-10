@@ -63,7 +63,7 @@ html {
 
 .sub-nav img:hover {
     transform: scale(1.1);  /* Slight zoom effect */
-    border-color: #ffcc00;  /* Change border color on hover */
+    border-color: darkblue;  /* Change border color on hover */
 }
 
 
