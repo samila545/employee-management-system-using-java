@@ -1,0 +1,415 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set the background color for the entire page */
+html {
+    background-color: rgb(247, 239, 239);
+    width: 100%;
+    height: 100vh;
+}
+
+/* Navbar styling */
+.nav {
+    background-color: rgb(37, 18, 180);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    color: white;
+    list-style: none;
+    font-size: 18px;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+    height: 100px;
+    
+}
+
+.nav li {
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+/* Logo/First item */
+.nav li:first-child {
+    font-size: 24px;
+    font-weight: bold;
+    
+}
+
+/* Sub-navigation styling */
+.sub-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.sub-nav img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid white;  /* White border around profile image */
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.sub-nav li {
+    list-style: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.sub-nav img:hover {
+    transform: scale(1.1);  /* Slight zoom effect */
+    border-color: darkblue;  /* Change border color on hover */
+}
+
+
+
+/* Button styling */
+.nav button {
+    background-color: #00008B; /* Dark blue button */
+    color: white; /* White text for contrast */
+    border: none;
+    width: 120px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav button:hover {
+    background-color: #0000FF; /* Bright blue on hover */
+    color: yellow; /* Yellow text on hover for visibility */
+}
+
+.overview div img {
+    margin-top: 10px; 
+        display: flex;
+        align-items: center; 
+        background-color: #fff;
+        padding: 1rem;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center; 
+    } 
+.grid-container div img{
+    margin-top: 10px; 
+    display: flex;
+    align-items: center; 
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center; 
+}
+/* Left sidebar styling */
+/* Left sidebar styling with Gradient */
+/* Left sidebar styling with Gradient */
+.side-bar {
+    position: fixed;
+    top: 100px; /* Below the navbar */
+    left: 0;
+    width: 200px;
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(0, 120, 212)); /* Gradient from light blue to Outlook blue */
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    list-style: none;
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    color: #fff; /* White text for better contrast */
+    height: calc(100vh - 100px); /* Full height minus navbar */
+    overflow-y: auto; /* Scrollable if content exceeds height */
+    text-align: center;
+}
+
+.side-bar li.active {
+    background-color: rgb(0, 90, 180); /* Hover color */
+    color: white;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-weight: bold;
+}
+
+.side-bar li {
+    padding: 10px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.side-bar li:hover {
+    background-color: rgb(87, 118, 150); /* Slightly darker blue on hover */
+    color: white;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .sub-nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav button {
+        width: 150px;
+    }
+
+    .nav .logo {
+        font-size: 22px;
+    }
+
+    .sub-nav img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .middle_view {
+        margin: 20px;
+        width: calc(100% - 40px);
+    }
+
+    .grid-container {
+        grid-template-columns: 1fr; /* Single column for smaller screens */
+    }
+}
+
+.middle_view {
+    margin-left: 220px; /* Offset for the sidebar */
+    margin-top: 120px; /* Offset for the navbar */
+    padding: 20px;
+    width: calc(100% - 220px); /* Adjust width to fit beside sidebar */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.middle_view .overview {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.middle_view .overview div {
+    flex: 1;
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(0, 120, 212)); /* Gradient from light blue to Outlook blue */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.middle_view h1 {
+    font-size: 24px;
+    text-align: center;
+    color: rgb(0, 90, 180);
+    margin-bottom: 10px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
+    gap: 20px;
+}
+
+.grid-container div {
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(0, 120, 212)); /* Gradient from light blue to Outlook blue */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.announcements {
+    background-color: #f0f0f0; /* Light gray background */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+}
+
+.announcements h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.announcement-list {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.announcement-list h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.announcement-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.announcement-list li {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+.announcement-list li:hover {
+    background-color: #2e7ce9; /* Lighten background on hover */
+}
+
+.announcement-list .date {
+    color: #666;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.create-announcement {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.create-announcement h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+#announcementForm {
+    display: flex;
+    flex-direction: column; 
+}
+
+#announcementForm label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#announcementForm input,
+#announcementForm textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+#announcementForm button {
+    background-color: #0078d4;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#announcementForm button:hover {
+    background-color: #005bb5;
+}
+/* General settings styles */
+.settings {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Section title */
+.settings h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+/* Change Password form container */
+.settings #changePasswordForm {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #949bc5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form labels */
+.settings #changePasswordForm label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+/* Input fields */
+.settings #changePasswordForm input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Button styles */
+.settings #changePasswordForm button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.settings #change-password button:hover {
+    background-color: #45a049;
+}
+
+/* Error and success message styles */
+.settings #change-password .message {
+    margin-top: 10px;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.settings #change-password .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.settings #change-password .success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
