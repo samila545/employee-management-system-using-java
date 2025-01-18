@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employment Management System</title>
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav>
+    <div class="logo">EMS</div>
+    <ul class="nav-links">
+        <li><button id="loginBtn">Login</button></li>
+    </ul>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <h1>Welcome to Employment Management System</h1>
+        <p>Manage your employees efficiently and effectively</p>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="about">
+    <h2>About Us</h2>
+    <p>We provide a comprehensive solution to manage your employees, track their performance, and streamline your HR processes."Our Employment Management System is designed to handle every aspect of employee management, from recruitment to retirement. Experience a smarter way to manage your team and foster a culture of excellence."</p>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="services">
+    <h2>Our Services</h2>
+    <div class="service-cards">
+        <div class="card">
+            <h3>Employee Management</h3>
+            <p>Manage employee records, performance reviews, and more.</p>
+        </div>
+        <div class="card">
+            <h3>Leave Management</h3>
+            <p>Track and approve employee leave requests with ease.</p>
+        </div>
+        <div class="card">
+            <h3>Payroll Management</h3>
+            <p>Automate payroll processing and ensure timely payments.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="testimonials">
+    <h2>Testimonials</h2>
+    <div class="testimonial">
+        <p>"This system has transformed how we manage our employees!"</p>
+        <h3>- Mesafint Getnet, Manager</h3>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 Employment Management System. All rights reserved.</p>
+</footer>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="loginForm">
+            <h2>Login</h2>
+            <input type="text" id="email" name="email" placeholder="Email" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>
