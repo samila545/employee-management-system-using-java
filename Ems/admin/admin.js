@@ -353,3 +353,29 @@ SalaryButton.addEventListener("click", () => {
          passwordMessage.style.color = 'red';
      });
  });
+ document.addEventListener("DOMContentLoaded", function () {
+    console.log("Fetching dashboard totals...");
+    fetch('http://localhost:8080/api/dashboard/totals')
+        .then((response) => {
+            console.log("API Response Status:", response.status);
+            if (!response.ok) {
+                throw new Error(`API responded with status ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log("Data fetched successfully:", data);
+            const overviewElements = document.querySelectorAll(".overview div");
+            overviewElements[0].textContent = `Total Employees: ${data.totalEmployees}`;
+            overviewElements[1].textContent = `Total Departments: ${data.totalDepartments}`;
+            overviewElements[2].textContent = `Total Managers: ${data.totalManagers}`;
+        })
+        .catch((error) => {
+            console.error("Error fetching dashboard totals:", error);
+            document.querySelector(".overview").innerHTML = `
+                <p style="color: red;">Error loading dashboard data. Please try again later.</p>`;
+        });
+});
+
+
+
