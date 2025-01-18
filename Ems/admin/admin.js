@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const employeesButton = document.querySelector(".side-bar li:nth-child(2)"); // "Employees" sidebar button
     const managersButton = document.querySelector(".side-bar li:nth-child(3)"); // "Managers" sidebar button
+    const departmentsButton = document.querySelector(".side-bar li:nth-child(4)"); // "departments" sidebar button
+    const SalaryButton = document.querySelector(".side-bar li:nth-child(5)"); // "salary" sidebar button
+
     const middleView = document.querySelector(".middle_view"); // Main content area
 
     // Handle Employees Button Click
@@ -177,4 +180,176 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("There was a problem with the fetch operation:", error);
             });
     });
+
+// Handle Departments Button Click
+departmentsButton.addEventListener("click", () => {
+    // Fetch department data from the backend
+    fetch("http://localhost:8080/getDepartments")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Clear existing content
+            middleView.innerHTML = "<h1>Department List</h1>";
+
+            // Create a table for displaying departments
+            const table = document.createElement("table");
+            table.style.width = "100%";
+            table.style.borderCollapse = "collapse";
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Department Name</th>
+                        <th>Manager Name</th>
+                        <th>Phone</th>
+                        <th>Number of Employees</th>
+                        <th>Budget</th>
+                        <th>Created Date</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map(department => `
+                        <tr>
+                            <td>${department.departmentId}</td>
+                            <td>${department.departmentName}</td>
+                            <td>${department.managerName}</td>
+                            <td>${department.phoneNumber || "N/A"}</td>
+                            <td>${department.numberOfEmployees || "N/A"}</td>
+                            <td>${department.budget || "N/A"}</td>
+                            <td>${department.createdDate || "N/A"}</td>
+                            <td>${department.description || "N/A"}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            `;
+
+            // Add table styles
+            table.querySelectorAll("th, td").forEach(cell => {
+                cell.style.border = "1px solid #ddd";
+                cell.style.padding = "8px";
+                cell.style.textAlign = "left";
+            });
+
+            // Append the table to the middle view
+            middleView.appendChild(table);
+        })
+        .catch(error => {
+            console.error("There was a problem with the fetch operation:", error);
+        });
 });
+
+// Handle Salaries Button Click
+SalaryButton.addEventListener("click", () => {
+    // Fetch salary data from the backend
+    fetch("http://localhost:8080/getSalaries")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Clear existing content
+            middleView.innerHTML = "<h1>Salary List</h1>";
+
+            // Create a table for displaying salaries
+            const table = document.createElement("table");
+            table.style.width = "100%";
+            table.style.borderCollapse = "collapse";
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>salary_id</th>
+                        <th>name</th>
+                        <th>Basic Salary</th>
+                        <th>bonus</th>
+                        <th>Deductions</th>
+                        <th>pay_date</th>
+                        <th>netSalary</th>
+                        <th>status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map(salary => `
+                        <tr>
+                            <td>${salary.salaryId}</td>
+                            <td>${salary.name || "N/A"}</td>
+                            <td>${salary.basicSalary || "N/A"}</td>
+                            <td>${salary.bonus || "N/A"}</td>
+                            <td>${salary.deductions || "N/A"}</td>
+                            <td>${salary.payDate || "N/A"}</td>
+                            <td>${salary.netSalary || "N/A"}</td>
+                            <td>${salary.status || "N/A"}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            `;
+
+            // Add table styles
+            table.querySelectorAll("th, td").forEach(cell => {
+                cell.style.border = "1px solid #ddd";
+                cell.style.padding = "8px";
+                cell.style.textAlign = "left";
+            });
+
+            // Append the table to the middle view
+            middleView.appendChild(table);
+        })
+        .catch(error => {
+            console.error("There was a problem with the fetch operation:", error);
+        });
+});
+
+
+});
+
+ // Handle Change Password Form Submission
+ const changePasswordForm = document.getElementById('changePasswordForm');
+ const passwordMessage = document.getElementById('passwordMessage');
+
+ changePasswordForm.addEventListener('submit', (e) => {
+     e.preventDefault();
+
+     const currentPassword = document.getElementById('currentPassword').value;
+     const newPassword = document.getElementById('newPassword').value;
+     const confirmPassword = document.getElementById('confirmPassword').value;
+
+     if (newPassword !== confirmPassword) {
+         passwordMessage.textContent = 'New passwords do not match!';
+         passwordMessage.style.color = 'red';
+         return;
+     }
+
+     // Make an API request to change the password
+     fetch('http://localhost:8080/changePassword', {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json',
+         },
+         credentials: 'include', 
+         body: JSON.stringify({
+             currentPassword,
+             newPassword
+         })
+     })
+     .then(response => {
+         if (!response.ok) {
+             throw new Error('Failed to change password');
+         }
+         return response.json();
+     })
+     .then(data => {
+         passwordMessage.textContent = data.message || 'Password changed successfully!';
+         passwordMessage.style.color = 'green';
+         changePasswordForm.reset();
+     })
+     .catch(error => {
+         passwordMessage.textContent = error.message || 'An error occurred.';
+         passwordMessage.style.color = 'red';
+     });
+ });
