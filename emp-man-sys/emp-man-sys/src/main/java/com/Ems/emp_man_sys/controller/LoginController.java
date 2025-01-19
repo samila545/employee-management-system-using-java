@@ -21,6 +21,12 @@ public class LoginController {
 
     public static String loggedinEmail;
     public static String loggedinPassword;
+    public static Long loggedinId;
+    public static String loggedinFirstname;
+    public static String loggedindepartment;
+
+
+
 
     @Autowired
     private ManagerRepository managerRepository;
@@ -45,6 +51,8 @@ public class LoginController {
             session.setAttribute("role", "admin");
             loggedinEmail = admin.getEmailAddress();
             loggedinPassword = admin.getPassword();
+            loggedinId = admin.getAdminId();
+            loggedinFirstname = admin.getFirstName();
             System.out.println("Logged in user: " + session.getAttribute("loggedInUser"));
 
 
@@ -63,7 +71,11 @@ public class LoginController {
             // Store manager details in session
             session.setAttribute("loggedInUser", manager.getEmailAddress());
             session.setAttribute("role", "manager");
-
+            loggedinEmail = manager.getEmailAddress();
+            loggedinPassword = manager.getPassword();
+            loggedinId = manager.getManagerId();
+            loggedinFirstname = manager.getFirstName();
+            loggedindepartment = manager.getDepartment();
             Map<String, String> managerResponse = Map.of(
                     "role", "manager",
                     "firstName", manager.getFirstName(),
@@ -79,7 +91,11 @@ public class LoginController {
             // Store employee details in session
             session.setAttribute("loggedInUser", employee.getEmailAddress());
             session.setAttribute("role", "employee");
-            System.out.println("Logged in user: " + session.getAttribute("loggedInUser"));
+            loggedinEmail = employee.getEmailAddress();
+            loggedinPassword = employee.getPassword();
+            loggedinId = employee.getEmployeeId();
+            loggedinFirstname = employee.getFirstName();
+            System.out.println(loggedinFirstname);
 
 
 
@@ -96,13 +112,6 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 
-    @PostMapping("/logout")
-    @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public ResponseEntity<?> logout(HttpSession session) {
-        // Invalidate the session
-        session.invalidate();
-        return ResponseEntity.ok("Logged out successfully");
-    }
 
 
 }

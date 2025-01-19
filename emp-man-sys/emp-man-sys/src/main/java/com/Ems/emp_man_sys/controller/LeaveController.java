@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 
@@ -36,10 +38,59 @@ public class LeaveController {
     }
 
     // Apply for a new leave
-    @PostMapping("/apply")
+    @PostMapping("/applyLeave")
     @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
-    public ResponseEntity<?> applyLeave(@RequestBody LeaveRecord leaveRecord) {
-        LeaveRecord savedLeave = leaveRecordRepository.save(leaveRecord);
-        return ResponseEntity.ok(savedLeave);
+    public String applyLeave(@RequestBody LeaveRecord leaveRecord) {
+
+
+        if (leaveRecord.getLeaveType() == null || leaveRecord.getStartDate() == null || leaveRecord.getEndDate() == null) {
+            return "Please provide all required details!";
+        }
+
+
+        // Set default status as "Pending" and save the leave record
+        leaveRecord.setStatus("Pending");
+        leaveRecord.setEmployeeId(LoginController.loggedinId);
+        leaveRecordRepository.save(leaveRecord);
+
+
+        return "Leave application submitted successfully!";
     }
+
+    @GetMapping("/getLeavesByManager")
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
+    public ResponseEntity<?> getLeavesByManager() {
+        // Retrieve the logged-in manager's department
+        String managerDepartment = LoginController.loggedindepartment;
+
+        if (managerDepartment == null || managerDepartment.isEmpty()) {
+            return ResponseEntity.status(400).body("Manager's department is not set.");
+        }
+
+        // Fetch leave records by employee department
+        List<LeaveRecord> leaveRecords = leaveRecordRepository.findByEmployeeDepartment(managerDepartment);
+
+        if (leaveRecords.isEmpty()) {
+            return ResponseEntity.status(404).body("No leave records found for department: " + managerDepartment);
+        }
+
+        return ResponseEntity.ok(leaveRecords);
+    }
+
+    @PatchMapping("/{leaveId}/approve")
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
+    public ResponseEntity<LeaveRecord> approveLeave(@PathVariable Long leaveId) {
+        // Find the leave record by leaveId
+        LeaveRecord leave = leaveRecordRepository.findByLeaveId(leaveId);
+
+            // Update the status to 'approved'
+            leave.setStatus("Approved");
+            LeaveRecord updatedLeave = leaveRecordRepository.save(leave); // Save the updated leave
+            return ResponseEntity.ok(updatedLeave); // Return the updated leave with 200 OK
+
+    }
+
+
+
+
 }

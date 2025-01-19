@@ -11,5 +11,5 @@ import java.util.List;
 public interface SalaryRepository extends JpaRepository<Salary, Long> {
     Salary findBysalaryId(Long id);
 
-    List<Salary> findByfirstname(String firstname );
+    List<Salary> findByFirstname(String firstname);
 }

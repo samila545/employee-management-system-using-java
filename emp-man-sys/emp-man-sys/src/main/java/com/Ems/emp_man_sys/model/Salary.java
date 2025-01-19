@@ -13,8 +13,13 @@ public class Salary {
     private Long salaryId;
 
 
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
+    @Column(name = "first_name", length = 100)
+    private String firstname;
+
+    @Column(name = "last_name", length = 50)
+    private String lastname;
+
+
 
     @Column(name = "basic_salary", nullable = false)
     private Double basicSalary;
@@ -44,13 +49,20 @@ public class Salary {
         this.salaryId = salaryId;
     }
 
-
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public Double getBasicSalary() {

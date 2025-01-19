@@ -16,7 +16,7 @@ public class AdminController {
     @Autowired
     private AdminRepository adminRepository;
 
-    @PostMapping("/changePassword")
+    @PostMapping("/changeAdminPassword")
     @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, HttpSession session) {
 

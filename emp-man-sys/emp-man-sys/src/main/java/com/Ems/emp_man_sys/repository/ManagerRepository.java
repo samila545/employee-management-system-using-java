@@ -7,5 +7,5 @@ import com.Ems.emp_man_sys.model.Manager;
 
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager, Long> {
-    Manager findByEmailAddressAndPassword(String email, String password);
+     Manager findByEmailAddressAndPassword(String email, String password);
 }
