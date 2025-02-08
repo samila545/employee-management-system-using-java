@@ -7,8 +7,10 @@ import com.Ems.emp_man_sys.repository.EmployeeRepository;
 import com.Ems.emp_man_sys.repository.ManagerRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.Ems.emp_man_sys.repository.LeaveRecordRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,10 @@ public class ManagerController {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private LeaveRecordRepository leaveRecordRepository;
+
 
     // Endpoint to get all managers
     @GetMapping("/getManagers")
@@ -52,6 +58,47 @@ public class ManagerController {
         return ResponseEntity.ok(manager);
     }
 
+    @PutMapping("/updateToManager")
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
+    public ResponseEntity<String> updateToManager(@RequestBody Employee updatedEmployee) {
+        System.out.println("we did it");
+        System.out.println(updatedEmployee.getEmployeeId()+"hiiiiuuu");
+        System.out.println(updatedEmployee.getFirstName()+"not");
+
+        return employeeRepository.findByEmployeeId(updatedEmployee.getEmployeeId()).map(employee -> {
+            // Create new Manager from Employee data
+
+            System.out.println(updatedEmployee.getEmployeeId()+"hiiiiuuu");
+            Manager newManager = new Manager();
+            newManager.setFirstName(updatedEmployee.getFirstName());
+            newManager.setLastName(updatedEmployee.getLastName());
+            newManager.setEmailAddress(updatedEmployee.getEmailAddress());
+            newManager.setDepartment(updatedEmployee.getDepartment());
+            newManager.setPosition(updatedEmployee.getPosition()); // Promote to Manager
+            newManager.setRole("MANAGER"); // Assign role as Manager
+            newManager.setSalary(updatedEmployee.getSalary());
+            newManager.setPhoneNumber(updatedEmployee.getPhoneNumber());
+            newManager.setDateOfBirth(updatedEmployee.getDateOfBirth());
+            newManager.setGender(updatedEmployee.getGender());
+            newManager.setPassword(updatedEmployee.getPassword());
+            newManager.setDateOfJoining(updatedEmployee.getDateOfHiring());
+            newManager.setImagePath(updatedEmployee.getImage_path());
+
+            // Save new Manager
+            managerRepository.save(newManager);
+
+            leaveRecordRepository.deleteByEmployeeId(updatedEmployee.getEmployeeId());
+            // Delete Employee from Employee Table
+            employeeRepository.deleteById(updatedEmployee.getEmployeeId());
+
+            return ResponseEntity.ok("Employee promoted to Manager and removed from Employees table.");
+        }).orElseGet(() -> {
+            // Return a meaningful response with an error message if not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Employee with ID " + updatedEmployee.getEmployeeId() + " not found.");
+        });
+
+    }
 
     @GetMapping("/getEmployeesByManager")
     @CrossOrigin(origins = "http://127.0.0.1:5500")
