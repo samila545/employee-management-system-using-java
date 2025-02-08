@@ -31,49 +31,45 @@
         <div class="content dashboard">
         <h1>Dashboard Overview</h1>
         <div class="overview">
-            <div>Total Employees</div>
-            <div>Total Departments</div>
-            <div>Total Managers</div>
+            <div>Overview 1</div>
+            <div>Overview 2</div>
+            <div>Overview 3</div>
         </div>
         <h1>Leave Details</h1>
         <div class="grid-container">
-            <div>leave Applied</div>
-            <div>leave pending</div>
-            <div>leave aproved</div>
-            <div>leave rejected</div>
+            <div>Detail 1</div>
+            <div>Detail 2</div>
+            <div>Detail 3</div>
+            <div>Detail 4</div>
         </div>
-        <div class="announcements">
-            <h2>Announcements</h2>  
-            <!-- Display Announcements -->
-            <div class="announcement-list">
-                <h3>Recent Announcements</h3>
-                <ul>
-                    <li>
-                        <strong>Maintenance Update:</strong> The system will be down on January 20 for maintenance.
-                        <span class="date">Posted on: 2025-01-10</span>
-                    </li>
-                    <li>
-                        <strong>Year-End Celebration:</strong> Join us on December 31 for a team celebration!
-                        <span class="date">Posted on: 2024-12-20</span>
-                    </li>
-                </ul>
-            </div>
+        <!-- Announcements Section -->
+
+    <div class="announcements" >
+        <h1>Announcements</h1>
         
-            <!-- Create Announcement -->
-            <div class="create-announcement">
-                <h3>Create a New Announcement</h3>
-                <form id="announcementForm">
-                    <label for="announcementTitle">Title:</label>
-                    <input type="text" id="announcementTitle" placeholder="Enter title" required>
-                    
-                    <label for="announcementContent">Content:</label>
-                    <textarea id="announcementContent" placeholder="Write your announcement here..." required></textarea>
-                    
-                    <button type="submit">Post Announcement</button>
-                </form>
-            </div>
+        <!-- Display Existing Announcements -->
+        <div class="announcement-list">
+            <h3>Recent Announcements</h3>
+            <ul id="announcementList">
+                <!-- Dynamic list of announcements will be populated here -->
+            </ul>
         </div>
     </div>
+    <!-- Create New Announcement Form -->
+    <div class="create-announcement">
+        <h3>Create a New Announcement</h3>
+        <form id="announcementForm">
+            <label for="announcementTitle">Title:</label>
+            <input type="text" id="announcementTitle" placeholder="Enter title" required>
+            
+            <label for="announcementContent">Content:</label>
+            <textarea id="announcementContent" placeholder="Write your announcement here..." required></textarea>
+            
+            <button type="submit">Post Announcement</button>
+        </form>
+    </div>
+
+
     <div class="content employees" style="display: none;">
         <h1>Employees Management</h1>
         <!-- Employee content here -->
@@ -110,6 +106,5 @@
     <script src="/homepage/login.js" defer></script>
     <script src="admin.js" defer></script>
 
-    
 </body>
 </html>

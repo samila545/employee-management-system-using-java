@@ -18,14 +18,75 @@
     </li>
     <li><button>Log out</button></li>
 </ul>
+
 <ul class="side-bar">
-    <li>Dashboard</li>
-    <li>employees</li>
-    <li>leaves</li>
-    <li>Salary</li>
-    <li>profile</li>
-    <li>Setting</li>
+    <li data-target="dashboard" class="active">Dashboard</li>
+    <li data-target="employees">employees</li>
+    <li data-target="leaves">leaves</li>
+    <li data-target="Salary">Salary</li>
+    <li data-target="profile">profile</li>
+    <li data-target="Settings">Settings</li>
 </ul>
+<div class="middle_view">
+    <div class="content dashboard">
+    <h1>Dashboard Overview</h1>
+    <div class="overview">
+        <div>Total numberof Employee</div>
+        <div>Total employee in the department</div>
+        <div>Total number of department</div>
+    </div>
+   
+    <div class="announcements">
+        <h1>Announcements</h1>
+        
+        <!-- Display Existing Announcements -->
+        <div class="announcement-list">
+            <h3>Recent Announcements</h3>
+            <ul id="announcementList">
+                <!-- Dynamic list of announcements will be populated here -->
+            </ul>
+        </div>
+    </div>
+    
+    
+</div>
+<div class="content profile" style="display: none;">
+    <h1>Employees Management</h1>
+    <!-- Employee content here -->
+</div>
+<div class="content leaves" style="display: none;">
+
+    <input type="number"placeholder="search by Id">
+    
+</div>
+
+<div class="content Salary" style="display: none;">
+    <h1>Salary Details</h1>
+    <!-- Salary content here -->
+</div>
+<div class="content employees" style="display: none;">
+    <h1>Salary Details</h1>
+    <!-- Salary content here -->
+</div>
+<div class="content Settings" style="display: none;">
+    <h1>Change Password</h1>
+    <form id="changePasswordForm">
+        <label for="currentPassword">Current Password:</label>
+        <input type="password" id="currentPassword" placeholder="Enter current password" required>
+
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" placeholder="Enter new password" required>
+
+        <label for="confirmPassword">Confirm New Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+
+        <button type="submit">Change Password</button>
+    </form>
+    <div id="passwordMessage" style="margin-top: 10px;"></div>
+</div>
+</div>
 <script src="/homepage/login.js" defer></script>
+<script src="manager.js" defer></script>
+
 </body>
 </html>

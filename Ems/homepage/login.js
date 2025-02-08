@@ -52,11 +52,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Redirect based on the role
                     if (data.role === 'admin') {
-                        window.location.href = '/Ems/admin/admin.html';
+                        window.location.href = '/admin/admin.html';
                     } else if (data.role === 'employee') {
-                        window.location.href = '/Ems/employee/employee.html';
+                        window.location.href = '/employee/employee.html';
                     } else if (data.role === 'manager') {
-                        window.location.href = '/Ems/manager/manager.html';
+                        window.location.href = '/manager/manager.html';
                     }
                 } else {
                     alert('Login failed: Invalid email or password');

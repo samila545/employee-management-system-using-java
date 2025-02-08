@@ -121,7 +121,135 @@ html {
     padding-left: 10px;
 }
 
+.side-bar li.active {
+    background-color: rgb(0, 90, 180); /* Hover color */
+    color: white;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-weight: bold;
+}
 
+
+.middle_view {
+    margin-left: 220px; /* Offset for the sidebar */
+    margin-top: 120px; /* Offset for the navbar */
+    padding: 20px;
+    width: calc(100% - 220px); /* Adjust width to fit beside sidebar */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.middle_view .overview {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.middle_view .overview div {
+    flex: 1;
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(0, 120, 212)); /* Gradient from light blue to Outlook blue */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.middle_view h1 {
+    font-size: 24px;
+    text-align: center;
+    color: rgb(0, 90, 180);
+    margin-bottom: 10px;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
+    gap: 20px;
+}
+
+.grid-container div {
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(0, 120, 212)); /* Gradient from light blue to Outlook blue */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.announcements {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.announcements h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.announcement-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.announcement-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.announcement-list .date {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.create-announcement h3 {
+    font-size: 20px;
+    color: #444;
+    margin-top: 20px;
+}
+
+#create-announcement input, 
+#create-announcement textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#create-announcement button {
+    background-color: #0078d4;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#create-announcement button:hover {
+    background-color: #005bb5;
+}
+
+/* General settings styles */
+.settings {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
 
 
 /* Responsive design for smaller screens */
@@ -150,4 +278,60 @@ html {
         width: 40px;
         height: 40px;
     }
+}
+
+.profile-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profile-image {
+    flex: 0 0 150px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #16a085;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info p {
+    flex: 1 1 calc(50% - 20px);
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.profile-info p strong {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.content.leaves {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.apply-leave-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.apply-leave-btn:hover {
+    background-color: #218838;
+}
+
+input[type="text"] {
+    padding: 8px;
+    width: 50%;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
