@@ -870,12 +870,70 @@ SalaryButton.addEventListener("click", () => {
          passwordMessage.style.color = 'red';
      });
  });
+ document.addEventListener("DOMContentLoaded", function () {
+    console.log("Fetching dashboard totals...");
+
+    fetch('http://localhost:8080/totals') 
+        .then(response => {
+            console.log("API Response Status:", response.status);
+            if (!response.ok) {
+                throw new Error(`API responded with status ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Data fetched successfully:", data);
+
+            // Employee, Manager, and Department Counts
+            document.querySelector(".totalEmployees").textContent = `Total Employees: ${data.totalEmployees}`;
+            document.querySelector(".totalDepartments").textContent = `Total Departments: ${data.totalDepartments}`;
+            document.querySelector(".totalManagers").textContent = `Total Managers: ${data.totalManagers}`;
+
+            // Leave Status
+            document.getElementById("leaveApplied").textContent = `Leave Applied: ${data.appliedLeaves}`;
+            document.getElementById("leaveApproved").textContent = `Leave Approved: ${data.approvedLeaves}`;
+            document.getElementById("leavePending").textContent = `Leave Pending: ${data.pendingLeaves}`;
+            document.getElementById("leaveRejected").textContent = `Leave Rejected: ${data.rejectedLeaves}`;
+        })
+        .catch(error => {
+            console.error("Error fetching dashboard totals:", error);
+            document.querySelector(".overview").innerHTML = `
+                <p style="color: red;">Error loading dashboard data. Please try again later.</p>`;
+        });
+});
 
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Select the logout button by its ID
+    const logoutButton = document.getElementById('logoutBtn');
 
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            // Send a logout request to the backend (if applicable)
+            fetch('http://localhost:8080/logout', { 
+                method: 'POST',
+                credentials: 'include' 
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Logout failed with status: ${response.status}`);
+                }
+                // Redirect to homepage.html only if the logout request is successful
+                window.location.href = '/homepage/home.html'; 
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+                // Optionally, you can force redirect even if logout fails
+                window.location.href = '/homepage/home.html';
+            });
+        });
+    } else {
+        console.error('Logout button not found');
+    }
+});
 
-
+ 
 
 
 

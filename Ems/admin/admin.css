@@ -14,7 +14,7 @@ html {
 
 /* Navbar styling */
 .nav {
-    background-color: rgb(0, 120, 212);
+    background-color: rgb(37, 18, 180);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -87,8 +87,26 @@ html {
     color: yellow; /* Yellow text on hover for visibility */
 }
 
-
-
+.overview div img {
+    margin-top: 10px; 
+        display: flex;
+        align-items: center; 
+        background-color: #fff;
+        padding: 1rem;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center; 
+    } 
+.grid-container div img{
+    margin-top: 10px; 
+    display: flex;
+    align-items: center; 
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center; 
+}
 /* Left sidebar styling */
 /* Left sidebar styling with Gradient */
 /* Left sidebar styling with Gradient */
@@ -213,24 +231,54 @@ html {
 .grid-container div {
     background: linear-gradient(180deg, rgb(173, 216, 230), rgb(0, 120, 212)); /* Gradient from light blue to Outlook blue */
     padding: 20px;
-    text-align: center;
+    text-align: left; /* Align text to the left */
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-size: 16px;
     font-weight: bold;
+    position: relative;
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Vertically align the image and text */
 }
 
+.grid-container div img {
+    width: 100px;  /* Image width */
+    height: 100x; /* Image height */
+    object-fit:cover;  /* Ensures the image is contained within the box */
+    margin-right: 0; /* Space between the image and the text */
+    border-radius: 8px; /* Optional: round the image corners */
+}
+
+/* Additional adjustment for the text */
+.grid-container div span {
+    flex: 1; /* Make sure the text takes up remaining space */
+}
+
+
+
+
+
 .announcements {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    background-color: #f0f0f0; /* Light gray background */
     border-radius: 8px;
-    margin-top: 20px;
-    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
 }
 
 .announcements h2 {
-    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.announcement-list {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.announcement-list h3 {
     color: #333;
     margin-bottom: 10px;
 }
@@ -238,52 +286,68 @@ html {
 .announcement-list ul {
     list-style: none;
     padding: 0;
-    margin: 10px 0;
 }
 
 .announcement-list li {
-    padding: 10px;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
+    border-radius: 3px;
     margin-bottom: 10px;
 }
 
+.announcement-list li:hover {
+    background-color: #2e7ce9; /* Lighten background on hover */
+}
+
 .announcement-list .date {
-    display: block;
-    font-size: 12px;
     color: #666;
+    font-size: 13px;
     margin-top: 5px;
 }
 
+.create-announcement {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 .create-announcement h3 {
-    font-size: 20px;
-    color: #444;
-    margin-top: 20px;
+    color: #333;
+    margin-bottom: 15px;
 }
 
-#create-announcement input, 
-#create-announcement textarea {
-    width: 100%;
+#announcementForm {
+    display: flex;
+    flex-direction: column; 
+}
+
+#announcementForm label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#announcementForm input,
+#announcementForm textarea {
     padding: 10px;
-    margin: 10px 0;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 3px;
+    margin-bottom: 15px;
 }
 
-#create-announcement button {
+#announcementForm button {
     background-color: #0078d4;
-    color: white;
+    color: #fff;
     padding: 10px 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-#create-announcement button:hover {
+#announcementForm button:hover {
     background-color: #005bb5;
 }
-
 /* General settings styles */
 .settings {
     padding: 20px;

@@ -16,7 +16,8 @@
                 <li>Admin</li>
             </ul>
         </li>
-        <li><button>Log out</button></li>
+        <li><button id="logoutBtn">Logout</button>
+</li>
     </ul>
     
     <ul class="side-bar">
@@ -31,45 +32,79 @@
         <div class="content dashboard">
         <h1>Dashboard Overview</h1>
         <div class="overview">
-            <div>Overview 1</div>
-            <div>Overview 2</div>
-            <div>Overview 3</div>
+            <div>
+               
+                <span class="totalEmployees"></span>
+                <img src="/images/emp3.webp" alt="Employee Icon" width="100" height="100">
+            </div>
+            <div>
+               
+                <span class="totalDepartments"></span>
+                <img src="/images/dep.jpg" alt="Department Icon" width="100" height="100">
+            </div>
+            <div>
+                
+                <span class="totalManagers"></span>
+                <img src="/images/manager.webp" alt="Manager Icon" width="100" height="100">
+            </div>
         </div>
+        
         <h1>Leave Details</h1>
         <div class="grid-container">
-            <div>Detail 1</div>
-            <div>Detail 2</div>
-            <div>Detail 3</div>
-            <div>Detail 4</div>
+            <div>
+               
+                <span id="leaveApplied"></span>
+                <img src="/images/leave.jpg" alt="Leave Icon" width="100" height="100">
+            </div>
+            <div>
+              
+                <span id="leaveApproved"></span>
+                <img src="/images/approved.jpg" alt="Approved Icon" width="100" height="100"> 
+            </div>
+            <div>
+                
+                <span id="leavePending"></span>
+                <img src="/images/pending.png" alt="Pending Icon" width="100" height="100"> 
+            </div>
+            <div>
+                
+                <span id="leaveRejected"></span>
+                <img src="/images/rejected.png" alt="Rejected Icon" width="100" height="100"> 
+            </div>
         </div>
-        <!-- Announcements Section -->
-
-    <div class="announcements" >
-        <h1>Announcements</h1>
         
-        <!-- Display Existing Announcements -->
-        <div class="announcement-list">
-            <h3>Recent Announcements</h3>
-            <ul id="announcementList">
-                <!-- Dynamic list of announcements will be populated here -->
-            </ul>
+        <div class="announcements">
+            <h2>Announcements</h2>  
+            <!-- Display Announcements -->
+            <div class="announcement-list">
+                <h3>Recent Announcements</h3>
+                <ul>
+                    <li>
+                        <strong>Maintenance Update:</strong> The system will be down on January 20 for maintenance.
+                        <span class="date">Posted on: 2025-01-10</span>
+                    </li>
+                    <li>
+                        <strong>Year-End Celebration:</strong> Join us on December 31 for a team celebration!
+                        <span class="date">Posted on: 2024-12-20</span>
+                    </li>
+                </ul>
+            </div>
+        
+            <!-- Create Announcement -->
+            <div class="create-announcement">
+                <h3>Create a New Announcement</h3>
+                <form id="announcementForm">
+                    <label for="announcementTitle">Title:</label>
+                    <input type="text" id="announcementTitle" placeholder="Enter title" required>
+                    
+                    <label for="announcementContent">Content:</label>
+                    <textarea id="announcementContent" placeholder="Write your announcement here..." required></textarea>
+                    
+                    <button type="submit">Post Announcement</button>
+                </form>
+            </div>
         </div>
     </div>
-    <!-- Create New Announcement Form -->
-    <div class="create-announcement">
-        <h3>Create a New Announcement</h3>
-        <form id="announcementForm">
-            <label for="announcementTitle">Title:</label>
-            <input type="text" id="announcementTitle" placeholder="Enter title" required>
-            
-            <label for="announcementContent">Content:</label>
-            <textarea id="announcementContent" placeholder="Write your announcement here..." required></textarea>
-            
-            <button type="submit">Post Announcement</button>
-        </form>
-    </div>
-
-
     <div class="content employees" style="display: none;">
         <h1>Employees Management</h1>
         <!-- Employee content here -->
@@ -106,5 +141,6 @@
     <script src="/homepage/login.js" defer></script>
     <script src="admin.js" defer></script>
 
+    
 </body>
 </html>
