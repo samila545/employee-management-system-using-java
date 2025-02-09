@@ -14,6 +14,8 @@ public interface LeaveRecordRepository extends JpaRepository<LeaveRecord, Intege
     // Find all leave records by status
     List<LeaveRecord> findByStatus(String status);
 
+    Integer countByStatus(String string);
+
     // Find all leave records for a specific employee
     List<LeaveRecord> findByEmployeeId(Long employeeId);
 

@@ -12,9 +12,11 @@ html {
     height: 100vh;
 }
 
+
+
 /* Navbar styling */
 .nav {
-    background-color: rgb(37, 18, 180);
+    background-color: #384e81;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -25,6 +27,9 @@ html {
     font-family: 'Arial', sans-serif;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
     height: 100px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
     
 }
 
@@ -87,26 +92,156 @@ html {
     color: yellow; /* Yellow text on hover for visibility */
 }
 
-.overview div img {
-    margin-top: 10px; 
-        display: flex;
-        align-items: center; 
-        background-color: #fff;
-        padding: 1rem;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        text-align: center; 
-    } 
-.grid-container div img{
-    margin-top: 10px; 
-    display: flex;
-    align-items: center; 
-    background-color: #fff;
-    padding: 1rem;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center; 
+/* General Overview Section Styles */
+.overview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-items: center;
+    align-items: center;
+    padding: 30px;
+    background-color: #f9fafb;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
+
+/* Individual Overview Item Styles */
+.overview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for individual overview items */
+.overview-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon Styling */
+.overview-item img {
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect on the icons */
+.overview-item:hover img {
+    transform: scale(1.1);
+}
+
+/* Text Styling */
+.overview-item span {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .overview {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .overview {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .overview {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .overview-item {
+        flex-direction: row;
+        justify-content: center;
+        padding: 15px;
+        gap: 15px;
+    }
+}
+
+/* General Grid Container Styles */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-items: center;
+    align-items: center;
+    padding: 30px;
+    background-color: #f9fafb;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+/* Individual Grid Item Styles */
+.grid-container > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(244, 248, 250));
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for individual grid items */
+.grid-container > div:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon Styling */
+.grid-container img {
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect on the icons */
+.grid-container > div:hover img {
+    transform: scale(1.1);
+}
+
+/* Text Styling */
+.grid-container span {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
 /* Left sidebar styling */
 /* Left sidebar styling with Gradient */
 /* Left sidebar styling with Gradient */
@@ -189,13 +324,13 @@ html {
 }
 
 .middle_view {
-    margin-left: 220px; /* Offset for the sidebar */
-    margin-top: 120px; /* Offset for the navbar */
-    padding: 20px;
+    margin-left: 220px; /* Offset for the sidebar */ /* Offset for the navbar */
+    padding: 50px;
     width: calc(100% - 220px); /* Adjust width to fit beside sidebar */
     display: flex;
     flex-direction: column;
     gap: 20px;
+    
 }
 
 .middle_view .overview {
@@ -206,7 +341,7 @@ html {
 
 .middle_view .overview div {
     flex: 1;
-    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(0, 120, 212)); /* Gradient from light blue to Outlook blue */
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(244, 248, 250)); /* Gradient from light blue to Outlook blue */
     padding: 20px;
     text-align: center;
     border-radius: 8px;
@@ -222,47 +357,15 @@ html {
     margin-bottom: 10px;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
-    gap: 20px;
-}
-
-.grid-container div {
-    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(0, 120, 212)); /* Gradient from light blue to Outlook blue */
-    padding: 20px;
-    text-align: left; /* Align text to the left */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-    font-weight: bold;
-    position: relative;
-    display: flex; /* Flexbox for alignment */
-    align-items: center; /* Vertically align the image and text */
-}
-
-.grid-container div img {
-    width: 100px;  /* Image width */
-    height: 100x; /* Image height */
-    object-fit:cover;  /* Ensures the image is contained within the box */
-    margin-right: 0; /* Space between the image and the text */
-    border-radius: 8px; /* Optional: round the image corners */
-}
-
-/* Additional adjustment for the text */
-.grid-container div span {
-    flex: 1; /* Make sure the text takes up remaining space */
-}
-
-
 
 
 
 .announcements {
-    background-color: #f0f0f0; /* Light gray background */
+    background-color: #fff; /* Light gray background */
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+    margin-top: 50px;
 }
 
 .announcements h2 {
@@ -270,8 +373,49 @@ html {
     margin-bottom: 15px;
 }
 
+.announcement-list button {
+    padding: 8px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-left: 10px;
+}
+
+/* Edit button style */
+.edit-btn {
+    background-color: #4CAF50; /* Green background for edit */
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+.edit-btn:focus {
+    outline: none; /* Remove outline when focused */
+}
+
+/* Delete button style */
+.delete-btn {
+    background-color: #f44336; /* Red background for delete */
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #e53935; /* Darker red on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+.delete-btn:focus {
+    outline: none; /* Remove outline when focused */
+}
+
+
 .announcement-list {
-    background-color: #fff;
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(244, 248, 250));
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -295,8 +439,8 @@ html {
     margin-bottom: 10px;
 }
 
-.announcement-list li:hover {
-    background-color: #2e7ce9; /* Lighten background on hover */
+.announcement-list li > div {
+    margin-bottom: 10px; /* Space between each line */
 }
 
 .announcement-list .date {
@@ -306,7 +450,7 @@ html {
 }
 
 .create-announcement {
-    background-color: #fff;
+    background: linear-gradient(180deg, rgb(173, 216, 230), rgb(244, 248, 250));
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -432,3 +576,15 @@ html {
     border: 1px solid #c3e6cb;
 }
 
+.dashboard h1{
+  margin-bottom: 100px;
+}
+
+.dashboard h1:nth-of-type(2) {   
+    margin: 30px;
+}
+
+.dashboard h1:nth-of-type(1) {   
+    margin: 30px;
+    margin-top: 80px;
+}

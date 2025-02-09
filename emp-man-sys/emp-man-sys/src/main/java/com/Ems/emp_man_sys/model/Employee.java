@@ -46,7 +46,7 @@ public class Employee {
     private String salary;
 
 
-    @Lob
+
     @Column(name = "image_path", length = 250)
     private String image_path;
 

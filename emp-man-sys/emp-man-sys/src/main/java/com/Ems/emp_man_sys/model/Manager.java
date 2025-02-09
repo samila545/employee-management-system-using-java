@@ -48,8 +48,8 @@ public class Manager {
     @Column(name = "position", length = 50)
     private String position;
 
-    @Lob
-    @Column(name = "image_path")
+
+    @Column(name = "image_path",length = 250)
     private String image_path;
 
     // Getters and Setters

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Show the login modal when the login button is clicked
     const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError'); 
     if (loginBtn) {
         loginBtn.addEventListener('click', function () {
             document.getElementById('loginModal').style.display = 'block';
@@ -59,7 +60,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.href = '/manager/manager.html';
                     }
                 } else {
-                    alert('Login failed: Invalid email or password');
+                    loginError.textContent = 'Invalid email or password. Please try again.';
+                    loginError.style.display = 'block'; // Show the error message
                 }
             } catch (error) {
                 console.error('Error during login:', error);

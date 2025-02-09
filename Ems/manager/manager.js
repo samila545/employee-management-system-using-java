@@ -59,26 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    function approveLeave(leaveId) {
-        // Call the API to update the status in the database
-        fetch(`http://localhost:8080/${leaveId}/approve`, {
-            method: 'PATCH',  // Using PATCH to update an existing resource
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(updatedLeave => {
-            // If successful, update the status in the UI
-            const statusCell = document.getElementById(`status-${leaveId}`);
-            statusCell.textContent = updatedLeave.status;  // Update status in table
     
-            // Disable the "Approve" button or change it as needed
-            const buttonCell = document.querySelector(`#leave-row-${leaveId} td:last-child`);
-            buttonCell.innerHTML = "Approved";  // Change the action text or disable button
-        })
-        
-    }
  
     
 
@@ -225,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 const middleView = document.querySelector(".middle_view");
                 // Clear existing content in the middle view (assuming middleView is where you display the table)
-                middleView.innerHTML = "<h1>Manage Records</h1><input class='searches' type='number' placeholder='search by Id'><button class='search-btn'>Search</button>";
+                middleView.innerHTML = "<h1>Manage Records</h1>";
         
                 // Create a table for displaying leave records
                 const table = document.createElement("table");
@@ -252,12 +233,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${leave.startDate || "N/A"}</td>
                                 <td>${leave.endDate || "N/A"}</td>
                                 <td>${leave.status || "N/A"}</td>
-                                <td>
-                                    ${leave.status === "Pending" ? 
-                                        `<button class="approve-btn" data-leave-id="${leave.leaveId}">Approve</button>` : 
-                                        "No Action"
-                                    }
-                                </td>
+                                 <td>
+                                       ${leave.status === "Pending" ? 
+            `
+                                       <button class="approve-btn" data-leave-id="${leave.leaveId}">Approve</button>
+                                       <button class="reject-btn" data-leave-id="${leave.leaveId}">Reject</button>
+            ` :  "No Action"
+        }
+    </td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -279,52 +262,60 @@ document.addEventListener('DOMContentLoaded', () => {
                         const leaveId = e.target.getAttribute('data-leave-id');
                         approveLeave(leaveId);  // Call approveLeave function on button click
                     }
-                });
-    
-                // Add event listener for the search functionality
-                const searchButton = document.querySelector('.search-btn');
-                const searchInput = document.querySelector('.searches');
-    
-                searchButton.addEventListener('click', () => {
-                    const searchId = searchInput.value.trim();
-                    if (searchId) {
-                        const filteredData = data.filter(leave => leave.employeeId.toString().includes(searchId));
-                        updateTable(filteredData); // Update the table with filtered data
-                    } else {
-                        updateTable(data); // Show all records if no search input
+                    if (e.target && e.target.matches('button.reject-btn')) {
+                        const leaveId = e.target.getAttribute('data-leave-id');
+                        rejectLeave(leaveId);  // Call rejectLeave function on button click
                     }
                 });
-    
-                // Function to update the table with filtered data
-                function updateTable(filteredData) {
-                    const tableBody = document.querySelector('#leave-table-body');
-                    // Ensure we clear the current table rows before adding new ones
-                    tableBody.innerHTML = '';
-                    // Populate the table with filtered rows
-                    filteredData.forEach(leave => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${leave.leaveId || "N/A"}</td>
-                            <td>${leave.employeeId || "N/A"}</td>
-                            <td>${leave.leaveType || "N/A"}</td>
-                            <td>${leave.startDate || "N/A"}</td>
-                            <td>${leave.endDate || "N/A"}</td>
-                            <td>${leave.status || "N/A"}</td>
-                            <td>
-                                ${leave.status === "Pending" ? 
-                                    `<button class="approve-btn" data-leave-id="${leave.leaveId}">Approve</button>` : 
-                                    "No Action"
-                                }
-                            </td>
-                        `;
-                        tableBody.appendChild(row);
+        
+                function rejectLeave(leaveId) {
+                    console.log(`Rejecting leave with ID: ${leaveId}`);
+                    // Perform the rejection logic (e.g., update the leave status in the database)
+                    // Example: You might want to send an API request to reject the leave
+                    fetch(`http://localhost:8080/rejectLeave/${leaveId}`, {
+                        method: 'PATCH', // Assuming PATCH method for updating status
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ status: 'Rejected' })  // Example payload
+                    })
+                    .then(response => response.json())
+                    .then(updatedLeave => {
+                        console.log('Leave rejected:', updatedLeave);
+                        // Optionally, refresh the table or update the status in the UI
+                        // This could trigger a re-fetch of the leave data
+                        LeavesButton.click();  // Reload the page to reflect the updated status
+                    })
+                    .catch(error => {
+                        console.error('Error rejecting leave:', error);
                     });
                 }
+
+                function approveLeave(leaveId) {
+                    // Call the API to update the status in the database
+                    fetch(`http://localhost:8080/${leaveId}/approve`, {
+                        method: 'PATCH',  // Using PATCH to update an existing resource
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(updatedLeave => {
+                        // If successful, update the status in the UI
+            
+                        LeavesButton.click();
+                        
+                    })
+                    
+                }
+            
             })
             .catch(error => {
                 console.error("There was a problem with the fetch operation:", error);
             });
     });
+    
+    
     
      
 
@@ -446,10 +437,11 @@ changePasswordForm.addEventListener('submit', (e) => {
 });
 
 });
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Fetching dashboard totals...");
 
-    fetch('http://localhost:8080/totalss') 
+    fetch('http://localhost:8080/total')  // Make sure this is the correct API endpoint
         .then(response => {
             console.log("API Response Status:", response.status);
             if (!response.ok) {
@@ -463,7 +455,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Update the HTML elements with the fetched data
             document.querySelector(".totalEmployees").textContent = `Total Employees: ${data.totalEmployees}`;
             document.querySelector(".totalDepartments").textContent = `Total Departments: ${data.totalDepartments}`;
-         
         })
         .catch(error => {
             console.error("Error fetching dashboard totals:", error);
@@ -498,4 +489,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Logout button not found');
     }
 });
-

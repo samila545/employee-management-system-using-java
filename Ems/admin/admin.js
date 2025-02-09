@@ -10,8 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add the active class to the clicked item
             item.classList.add('active');
 
+           
+
             // Get the target content section
             const target = item.getAttribute('data-target');
+
+            console.log("Target: ", target)
 
             // Hide all content sections
             contentSections.forEach(section => section.style.display = 'none');
@@ -35,16 +39,106 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('http://localhost:8080/getAnnouncements')
             .then(response => response.json())
             .then(announcements => {
+
+                console.log("Fetched Announcements:", announcements);
                 const announcementList = document.querySelector('.announcement-list ul');
                 announcementList.innerHTML = announcements.map(announcement => `
-                    <li>
-                        <strong>${announcement.title}:</strong> ${announcement.content}
-                        <span class="date">Posted on: ${new Date(announcement.postedDate).toLocaleDateString()}</span>
+                    <li data-id="${announcement.id}">
+                         <div>
+        <strong>${announcement.title}:</strong>
+    </div>
+    <div>
+        ${announcement.content}
+    </div>
+    <div>
+        <span class="date">Posted on: ${new Date(announcement.postedDate).toLocaleDateString()}</span>
+    </div>
+    <div>
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
                     </li>
                 `).join('');
+    
+                // Add event listeners for edit and delete buttons
+                const editButtons = document.querySelectorAll('.edit-btn');
+                const deleteButtons = document.querySelectorAll('.delete-btn');
+    
+                editButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+
+                        console.log('Closest li element:', e.target.closest('li'));
+
+                        const announcementId = e.target.closest('li').dataset.id;
+                        editAnnouncement(announcementId); // Call function to edit the announcement
+                    });
+                });
+    
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const announcementId = e.target.closest('li').dataset.id;
+                        deleteAnnouncement(announcementId); // Call function to delete the announcement
+                    });
+                });
             })
             .catch(error => console.error('Error fetching announcements:', error));
     }
+    
+    // Function to handle the editing of an announcement
+    function editAnnouncement(announcementId) {
+        const newTitle = prompt('Enter new title:');
+        const newContent = prompt('Enter new content:');
+
+        if (!announcementId) {
+            console.log("Announcement ID is undefined!");
+            return;
+        }
+    
+    
+        if (newTitle && newContent) {
+            fetch(`http://localhost:8080/updateAnnouncement/${announcementId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: newTitle,
+                    content: newContent
+                }),
+            })
+            .then(response => response.text())
+            .then(updatedAnnouncementMessage => {
+                alert(updatedAnnouncementMessage);
+                fetchAnnouncements(); // Re-fetch announcements to reflect changes
+            })
+            .catch(error => {
+                console.error('Error updating announcement:', error);
+                alert('Error updating announcement');
+            });
+        }
+    }
+    
+    
+    // Function to handle deleting an announcement
+    function deleteAnnouncement(announcementId) {
+        if (confirm('Are you sure you want to delete this announcement?')) {
+            fetch(`http://localhost:8080/deleteAnnouncement/${announcementId}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Announcement deleted successfully!');
+                    fetchAnnouncements(); // Re-fetch announcements to reflect changes
+                } else {
+                    alert('Error deleting announcement');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting announcement:', error);
+                alert('Error deleting announcement');
+            });
+        }
+    }
+    
 
 
     // Handle form submission to create a new announcement
@@ -496,6 +590,12 @@ announcementForm.addEventListener('submit', (event) => {
                 return response.json();
             })
             .then(data => {
+                console.log("Managers Data:", data); // Debugging Step ✅
+
+                data.forEach(manager => {
+                    console.log(`Manager: ${manager.firstName}, Image Path: ${manager.imagePath}`);
+                });
+        
                 // Clear existing content
                 middleView.innerHTML = `
                 <div>
@@ -530,11 +630,12 @@ announcementForm.addEventListener('submit', (event) => {
                             <th>Date of Hiring</th>
                             <th>Salary</th>
                             <th>Image</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${data.map(manager => `
-                            <tr>
+                            <tr data-manager='${JSON.stringify(manager)}'>
                                 <td>${manager.managerId}</td>
                                 <td>${manager.firstName}</td>
                                 <td>${manager.lastName}</td>
@@ -546,17 +647,23 @@ announcementForm.addEventListener('submit', (event) => {
                                 <td>${manager.role || "N/A"}</td>
                                 <td>${manager.position || "N/A"}</td>
                                 <td>${manager.password || "N/A"}</td>
-                                <td>${manager.dateOfHiring || "N/A"}</td>
+                                <td>${manager.dateOfJoining || "N/A"}</td>
                                 <td>${manager.salary || "N/A"}</td>
                                 <td>
-                                    ${manager.image_path ? `<img src="http://localhost:8080/${manager.image_path}" alt="Manager Image" style="width: 50px; height: 50px;">` : "N/A"}
+                                    
+                                    ${manager.imagePath ? `<img src="http://localhost:8080/${manager.imagePath}" alt="Manager Image" style="width: 50px; height: 50px;">` : "N/A"}
                                 </td>
+                                  
+                                <td style="border: 1px solid black; padding: 8px;">
+                                                    <button class="edit-manager-btn" data-id="${manager.managerId}">Edit</button>
+                                                    <button class="delete-manager-btn" data-id="${manager.managerId}">Delete</button>
+                                                </td>
                             </tr>
                         `).join('')}
                     </tbody>
                 `;
 
-
+                   
                 // Add table styles
                 table.querySelectorAll("th, td").forEach(cell => {
                     cell.style.border = "1px solid #ddd";
@@ -566,6 +673,190 @@ announcementForm.addEventListener('submit', (event) => {
 
                 // Append the table to the middle view
                 middleView.appendChild(table);
+
+                
+
+                  // ✅ Attach event listeners AFTER table is added
+                  document.querySelectorAll(".edit-manager-btn").forEach(button => {
+                    button.addEventListener("click", openEditManagerForm);
+                });
+    
+                document.querySelectorAll(".delete-manager-btn").forEach(button => {
+                    button.addEventListener("click", deleteManager);
+                });
+
+                
+                const searchManagerBtn = document.getElementById("searchManagerBtn");
+if (searchManagerBtn) {
+    searchManagerBtn.addEventListener("click", function () {
+        const managerId = document.getElementById("searchManagerId").value.trim();
+
+        if (!managerId) {
+            alert("Please enter a Manager ID to search.");
+            return;
+        }
+
+        fetch(`http://localhost:8080/managers/${managerId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Manager not found");
+                }
+                return response.json();
+            })
+            .then(manager => {
+                // Display the searched manager in the table
+                middleView.innerHTML = `
+                    <div>
+                        <h1>Search Result</h1>
+                        <button id="backToManagers">Back to Manager List</button>
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
+                            <thead>
+                                <tr style="border: 1px solid black;">
+                                    <th style="border: 1px solid black; padding: 8px;">ID</th>
+                                    <th style="border: 1px solid black; padding: 8px;">First Name</th>
+                                    <th style="border: 1px solid black; padding: 8px;">Last Name</th>
+                                    <th style="border: 1px solid black; padding: 8px;">Phone</th>
+                                    <th style="border: 1px solid black; padding: 8px;">Email</th>
+                                    <th style="border: 1px solid black; padding: 8px;">Department</th>
+                                    <th style="border: 1px solid black; padding: 8px;">Role</th>
+                                    <th style="border: 1px solid black; padding: 8px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-manager='${JSON.stringify(manager)}'>
+                                    <td style="border: 1px solid black; padding: 8px;">${manager.managerId}</td>
+                                    <td style="border: 1px solid black; padding: 8px;">${manager.firstName}</td>
+                                    <td style="border: 1px solid black; padding: 8px;">${manager.lastName}</td>
+                                    <td style="border: 1px solid black; padding: 8px;">${manager.phoneNumber}</td>
+                                    <td style="border: 1px solid black; padding: 8px;">${manager.emailAddress}</td>
+                                    <td style="border: 1px solid black; padding: 8px;">${manager.department || "N/A"}</td>
+                                    <td style="border: 1px solid black; padding: 8px;">${manager.role || "N/A"}</td>
+                                    <td style="border: 1px solid black; padding: 8px;">
+                                        <button class="edit-btn" data-id="${manager.managerId}">Edit</button>
+                                        <button class="delete-btn" data-id="${manager.managerId}">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+
+                // Attach event listeners for Edit and Delete buttons
+                document.querySelector(".edit-btn")?.addEventListener("click", openEditForm);
+                document.querySelector(".delete-btn")?.addEventListener("click", deleteManager);
+
+                // Back to Manager List button
+                document.getElementById("backToManagers").addEventListener("click", function () {
+                    managersButton.click(); // Reload full manager list
+                });
+            })
+            .catch(error => {
+                alert(error.message);
+            }); // <-- Ensure this catch() is properly placed
+    });
+} else {
+    console.error('Search button not found');
+}
+
+
+                function openEditManagerForm(event) {
+                    const managerId = event.target.getAttribute("data-id");
+                    const row = event.target.closest("tr");
+                    const manager = JSON.parse(row.getAttribute("data-manager"));
+                
+                    // Create a form for updating employee details
+                    middleView.innerHTML = `
+                        <div>  
+                            <h2>Edit Employee</h2>
+                            <form id="editManagerForm">
+                                <label>First Name: <input type="text" name="firstName" value="${manager.firstName}" required></label><br>
+                                <label>Last Name: <input type="text" name="lastName" value="${manager.lastName}" required></label><br>
+                                <label>Phone: <input type="text" name="phoneNumber" value="${manager.phoneNumber}" required></label><br>
+                                <label>Date of Birth: <input type="date" name="dateOfBirth" value="${manager.dateOfBirth}" required></label><br>
+                                <label>Gender: 
+                                    <select name="gender">
+                                        <option value="Male" ${manager.gender === "Male" ? "selected" : ""}>Male</option>
+                                        <option value="Female" ${manager.gender === "Female" ? "selected" : ""}>Female</option>
+                                    </select>
+                                </label><br>
+                                <label>Email: <input type="email" name="emailAddress" value="${manager.emailAddress}" required></label><br>
+                                <label>Department: <input type="text" name="department" value="${manager.department || ""}"></label><br>
+                                <label>Role: <input type="text" name="role" value="${manager.role || ""}"></label><br>
+                                <label>Position: <input type="text" name="position" value="${manager.position || ""}"></label><br>
+                                <label>Password: <input type="password" name="password" value="${manager.password || ""}" required></label><br>
+                                <label>Date of Hiring: <input type="date" name="dateOfJoining" value="${manager.dateOfJoining || ""}"></label><br>
+                                <label>Salary: <input type="number" name="salary" value="${manager.salary || ""}" step="0.01"></label><br>
+                                <label>Image URL: <input type="text" name="image_path" value="${manager.image_path || ""}"></label><br>
+                                
+                                <button type="submit">Update Employee</button>
+                                <button type="button" id="cancelEdit">Cancel</button>
+                            </form>
+                        </div>
+                    `;
+                
+                    // Handle form submission
+                    document.getElementById("editManagerForm").addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        
+                        // Create updated employee object from form data
+                        const updatedManager = {
+                            managerId: managerId,
+                            firstName: this.firstName.value,
+                            lastName: this.lastName.value,
+                            phoneNumber: this.phoneNumber.value,
+                            dateOfBirth: this.dateOfBirth.value,
+                            gender: this.gender.value,
+                            emailAddress: this.emailAddress.value,
+                            department: this.department.value,
+                            role: this.role.value,
+                            position: this.position.value,
+                            password: this.password.value,
+                            dateOfJoining: this.dateOfJoining.value,
+                            salary: parseFloat(this.salary.value) || 0, // Convert to number
+                            image_path: this.image_path.value
+                        };
+                
+                        updateManager(managerId, updatedManager);
+                    });
+                
+                    // Handle cancel button
+                    document.getElementById("cancelEdit").addEventListener("click", function () {
+                        managersButton.click(); // Reload employee list
+                    });
+                }
+
+                // ✅ Update Employee Function
+    function updateManager(managerId, updatedManager) {
+        fetch(`http://localhost:8080/managers/${managerId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedManager),
+        })
+        .then(response => response.json())
+        .then(updatedManager => {
+            alert("Employee updated successfully!");
+            managersButton.click(); // Refresh the table
+        })
+        .catch(error => console.error("Error updating employee:", error));
+    }
+    
+    // ✅ Delete Employee Function
+    function deleteManager(event) {
+        const managerId = event.target.getAttribute("data-id");
+        if (confirm("Are you sure you want to delete this employee?")) {
+            fetch(`http://localhost:8080/managers/${managerId}`, { method: "DELETE" })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Employee deleted successfully!");
+                        managersButton.click(); // Refresh the table
+                    } else {
+                        alert("Error deleting employee.");
+                    }
+                })
+                .catch(error => console.error("Error deleting employee:", error));
+        }
+    }
+
 
                 const addManagerBtn = document.getElementById("addManagerBtn");
                 addManagerBtn.addEventListener("click" ,() => {
@@ -580,13 +871,22 @@ announcementForm.addEventListener('submit', (event) => {
                 }
 
                 fetch(`http://localhost:8080/employees/${employeeId}`)
-                .then(response => { 
-                })
-                    .then(employee => {
-                        if (!employee) {
-                            alert("Employee not found!");
-                            return;
-                        }
+    .then(response => {
+        if (!response.ok) {
+            // Try to read the response body as JSON or text based on what the server returns
+            return response.text().then(errorText => {
+                // If the errorText is empty, display a generic error message
+                alert(errorText || "An error occurred while fetching the employee data.");
+                throw new Error('Response not OK');
+            });
+        }
+        return response.json(); // Continue with the JSON response if it's OK
+    })
+    .then(employee => {
+        if (!employee) {
+            alert("Employee not found!");
+            return;
+        }
 
                         
 
@@ -633,7 +933,7 @@ announcementForm.addEventListener('submit', (event) => {
     <input type="text" id="empSalary" value="${employee.salary || ''}"><br>
 
     <label for="empImage">Employee Image:</label>
-    <input type="text" id="empImage" value="${employee.image_path ? 'http://localhost:8080/' + employee.image_path : ''}" readonly><br>
+    <input type="text" id="empImage" value="${employee.image_path ? employee.image_path : ''}" readonly><br>
 
     <button type="button" id="updatetoManager" >Transfer to Manager</button>
 </form>
@@ -659,7 +959,7 @@ announcementForm.addEventListener('submit', (event) => {
                         gender: document.getElementById("empGender").value,
                         emailAddress: document.getElementById("empEmail").value,
                         department: document.getElementById("empDepartment").value,
-                        role: "MANAGER", // Manually setting the role to Manager
+                        role: "Manager", // Manually setting the role to Manager
                         position: document.getElementById("empPosition").value,
                         password: document.getElementById("empPassword").value,
                         dateOfHiring: document.getElementById("empDateOfHiring").value,
@@ -708,7 +1008,14 @@ departmentsButton.addEventListener("click", () => {
         })
         .then(data => {
             // Clear existing content
-            middleView.innerHTML = "<h1>Department List</h1>";
+            middleView.innerHTML = `
+            <div>
+                <h1>Department List</h1>
+                <div>
+                    <button id="addNewDepartment">Add New Department</button>
+                </div>
+            </div>
+            `;
 
             // Create a table for displaying departments
             const table = document.createElement("table");
@@ -725,11 +1032,12 @@ departmentsButton.addEventListener("click", () => {
                         <th>Budget</th>
                         <th>Created Date</th>
                         <th>Description</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${data.map(department => `
-                        <tr>
+                        <tr data-department='${JSON.stringify(department)}'>
                             <td>${department.departmentId}</td>
                             <td>${department.departmentName}</td>
                             <td>${department.managerName}</td>
@@ -738,6 +1046,10 @@ departmentsButton.addEventListener("click", () => {
                             <td>${department.budget || "N/A"}</td>
                             <td>${department.createdDate || "N/A"}</td>
                             <td>${department.description || "N/A"}</td>
+                            <td>
+                                    <button class="edit-manager-btn" data-id="${department.departmentId}">Edit</button>
+                                    <button class="delete-manager-btn" data-id="${department.departmentId}">Delete</button>
+                            </td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -752,6 +1064,175 @@ departmentsButton.addEventListener("click", () => {
 
             // Append the table to the middle view
             middleView.appendChild(table);
+
+            // ✅ Attach event listeners AFTER table is added
+            document.querySelectorAll(".edit-manager-btn").forEach(button => {
+                button.addEventListener("click", openEditDepartmentForm);
+            });
+
+            document.querySelectorAll(".delete-manager-btn").forEach(button => {
+                button.addEventListener("click", deleteDepartment);
+            });
+
+            const addDepartmentBtn = document.getElementById("addNewDepartment");
+addDepartmentBtn.addEventListener("click", () => {
+    // Create a form to add a new department
+    middleView.innerHTML = `
+        <div>
+            <h1>Add New Department</h1>
+            <form id="addDepartmentForm">
+                <label for="departmentName">Department Name:</label>
+                <input type="text" id="departmentName" name="departmentName" required><br><br>
+                
+                <label for="managerName">Manager Name:</label>
+                <input type="text" id="managerName" name="managerName" required><br><br>
+                
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber"><br><br>
+                
+                <label for="numberOfEmployees">Number of Employees:</label>
+                <input type="number" id="numberOfEmployees" name="numberOfEmployees"><br><br>
+                
+                <label for="budget">Budget:</label>
+                <input type="number" id="budget" name="budget"><br><br>
+                
+                <label for="createdDate">Created Date:</label>
+                <input type="date" id="createdDate" name="createdDate"><br><br>
+                
+                <label for="description">Description:</label>
+                <textarea id="description" name="description"></textarea><br><br>
+
+                <button type="submit">Add Department</button>
+            </form>
+            <button id="backToDepartments">Back to Department List</button>
+        </div>
+    `;
+
+    // Back to Department List functionality
+    document.getElementById("backToDepartments").addEventListener("click", function () {
+        departmentsButton.click(); // Reload full department list
+    });
+
+    // Handle form submission
+    document.getElementById("addDepartmentForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent form from submitting normally
+        
+        const formData = new FormData();
+        formData.append("departmentName", document.getElementById("departmentName").value);
+        formData.append("managerName", document.getElementById("managerName").value);
+        formData.append("phoneNumber", document.getElementById("phoneNumber").value);
+        formData.append("numberOfEmployees", document.getElementById("numberOfEmployees").value);
+        formData.append("budget", document.getElementById("budget").value);
+        formData.append("createdDate", document.getElementById("createdDate").value);
+        formData.append("description", document.getElementById("description").value);
+
+        // Send the data to the backend (assuming the backend endpoint is /addDepartment)
+        fetch("http://localhost:8080/addDepartment", {
+            method: "POST",
+            body: formData,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to add department");
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("Department added successfully!");
+                departmentsButton.click(); // Reload department list after adding
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("There was an error adding the department.");
+            });
+    });
+});
+
+
+            function openEditDepartmentForm(event) {
+                const departmentId = event.target.getAttribute("data-id");
+                const row = event.target.closest("tr");
+                const department = JSON.parse(row.getAttribute("data-department"));
+            
+                // Create a form for updating employee details
+                middleView.innerHTML = `
+                    <div>  
+    <h2>Edit Department</h2>
+    <form id="editDepartmentForm">
+        <label>Department ID: <input type="number" name="departmentId" value="${department.departmentId}" readonly required></label><br>
+        <label>Department Name: <input type="text" name="departmentName" value="${department.departmentName}" required></label><br>
+        <label>Manager Name: <input type="text" name="managerName" value="${department.managerName}" required></label><br>
+        <label>Phone: <input type="text" name="phoneNumber" value="${department.phoneNumber || "N/A"}" required></label><br>
+        <label>Number of Employees: <input type="number" name="numberOfEmployees" value="${department.numberOfEmployees || "0"}" required></label><br>
+        <label>Budget: <input type="number" name="budget" value="${department.budget || "0"}" required></label><br>
+        <label>Created Date: <input type="date" name="createdDate" value="${department.createdDate || ""}" required></label><br>
+        <label>Description: <textarea name="description">${department.description || ""}</textarea></label><br>
+
+        <button type="submit">Update Department</button>
+        <button type="button" id="cancelEdit">Cancel</button>
+    </form>
+</div>
+
+                `;
+            
+                // Handle form submission
+                document.getElementById("editDepartmentForm").addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    
+                    // Create updated employee object from form data
+                    const updatedDepartment = {
+                        departmentId: this.departmentId.value,  // Department ID, typically read-only
+                        departmentName: this.departmentName.value,
+                        managerName: this.managerName.value,
+                        phoneNumber: this.phoneNumber.value,
+                        numberOfEmployees: parseInt(this.numberOfEmployees.value) || 0,  // Convert to number, default to 0
+                        budget: parseFloat(this.budget.value) || 0,  // Convert to number, default to 0
+                        createdDate: this.createdDate.value,
+                        description: this.description.value
+                    };
+                    
+                    updateDepartment(departmentId, updatedDepartment);
+                });
+            
+                // Handle cancel button
+                document.getElementById("cancelEdit").addEventListener("click", function () {
+                    managersButton.click(); // Reload employee list
+                });
+            }
+
+   // ✅ Update Department Function
+function updateDepartment(departmentId, updatedDepartment) {
+    fetch(`http://localhost:8080/departments/${departmentId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedDepartment), // Send updated department object
+    })
+    .then(response => response.json())
+    .then(updatedDepartment => {
+        alert("Department updated successfully!");
+        departmentsButton.click(); // Refresh the department list
+    })
+    .catch(error => console.error("Error updating department:", error));
+}
+
+// ✅ Delete Department Function
+function deleteDepartment(event) {
+    const departmentId = event.target.getAttribute("data-id");
+    if (confirm("Are you sure you want to delete this department?")) {
+        fetch(`http://localhost:8080/departments/${departmentId}`, { method: "DELETE" })
+            .then(response => {
+                if (response.ok) {
+                    alert("Department deleted successfully!");
+                    departmentsButton.click(); // Refresh the department list
+                } else {
+                    alert("Error deleting department.");
+                }
+            })
+            .catch(error => console.error("Error deleting department:", error));
+    }
+}
+
+
         })
         .catch(error => {
             console.error("There was a problem with the fetch operation:", error);
@@ -770,7 +1251,14 @@ SalaryButton.addEventListener("click", () => {
         })
         .then(data => {
             // Clear existing content
-            middleView.innerHTML = "<h1>Salary List</h1>";
+            middleView.innerHTML = `
+            <div>
+                <h1>Salary List</h1>
+                <div>
+                    <button id="addSalaryBtn">Enter New Salary</button>
+                </div>
+            </div>
+            `;
 
             // Create a table for displaying salaries
             const table = document.createElement("table");
@@ -788,6 +1276,7 @@ SalaryButton.addEventListener("click", () => {
                         <th>pay_date</th>
                         <th>netSalary</th>
                         <th>status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -802,6 +1291,11 @@ SalaryButton.addEventListener("click", () => {
                             <td>${salary.payDate || "N/A"}</td>
                             <td>${salary.netSalary || "N/A"}</td>
                             <td>${salary.status || "N/A"}</td>
+                           <td>
+                                 <button class="change-status-btn" data-id="${salary.salaryId}" data-status="${salary.status}">
+                                  ${salary.status === "Paid" ? "Mark as Unpaid" : "Mark as Paid"}
+                                 </button>
+                            </td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -816,6 +1310,115 @@ SalaryButton.addEventListener("click", () => {
 
             // Append the table to the middle view
             middleView.appendChild(table);
+
+
+            // Add functionality to "Enter New Salary" button
+            document.getElementById("addSalaryBtn").addEventListener("click", () => {
+                // Create a form to enter new salary
+                middleView.innerHTML = `
+                    <div>
+                        <h1>Enter New Salary</h1>
+                        <form id="addSalaryForm">
+                            <label for="firstname">First Name:</label>
+                            <input type="text" id="firstname" name="firstname" required><br><br>
+
+                            <label for="lastname">Last Name:</label>
+                            <input type="text" id="lastname" name="lastname" required><br><br>
+
+                            <label for="basicSalary">Basic Salary:</label>
+                            <input type="number" id="basicSalary" name="basicSalary" required><br><br>
+
+                            <label for="bonus">Bonus:</label>
+                            <input type="number" id="bonus" name="bonus"><br><br>
+
+                            <label for="deductions">Deductions:</label>
+                            <input type="number" id="deductions" name="deductions"><br><br>
+
+                            <label for="payDate">Pay Date:</label>
+                            <input type="date" id="payDate" name="payDate" required><br><br>
+
+                            <label for="netSalary">Net Salary:</label>
+                            <input type="number" id="netSalary" name="netSalary" required><br><br>
+
+                            <label for="status">Status:</label>
+                            <select id="status" name="status" required>
+                                <option value="Paid">Paid</option>
+                                <option value="Unpaid">Unpaid</option>
+                            </select><br><br>
+
+                            <button type="submit">Add Salary</button>
+                        </form>
+                    </div>
+                `;
+
+                // Handle form submission
+                document.getElementById("addSalaryForm").addEventListener("submit", function(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    // Get form data
+                    const formData = new FormData(this);
+                    const salaryData = {
+                        firstname: formData.get("firstname"),
+                        lastname: formData.get("lastname"),
+                        basicSalary: parseFloat(formData.get("basicSalary")),
+                        bonus: parseFloat(formData.get("bonus")) || 0,
+                        deductions: parseFloat(formData.get("deductions")) || 0,
+                        payDate: formData.get("payDate"),
+                        netSalary: parseFloat(formData.get("netSalary")),
+                        status: formData.get("status")
+                    };
+
+                    // Send the data to the backend (assuming the endpoint is "/addSalary")
+                    fetch("http://localhost:8080/addSalary", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(salaryData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Failed to add salary");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        alert("Salary added successfully!");
+                        SalaryButton.click(); // Refresh salary list after adding
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("There was an error adding the salary.");
+                    });
+                });
+            });
+
+            // Attach event listener to "Change Status" buttons
+            const changeStatusBtns = document.querySelectorAll(".change-status-btn");
+            changeStatusBtns.forEach(button => {
+                button.addEventListener("click", function() {
+                    const salaryId = this.getAttribute("data-id");
+                    const currentStatus = this.getAttribute("data-status");
+                    const newStatus = currentStatus === "Paid" ? "Unpaid" : "Paid"; // Toggle status
+
+                    // Update the status by sending a request to the backend
+                    fetch(`http://localhost:8080/updateSalaryStatus/${salaryId}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ status: newStatus })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Failed to update status");
+                        }
+                        alert("Salary status updated successfully!");
+                        // Refresh the salary table
+                        SalaryButton.click();
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("There was an error updating the salary status.");
+                    });
+                });
+            });
         })
         .catch(error => {
             console.error("There was a problem with the fetch operation:", error);
@@ -870,6 +1473,9 @@ SalaryButton.addEventListener("click", () => {
          passwordMessage.style.color = 'red';
      });
  });
+
+
+
  document.addEventListener("DOMContentLoaded", function () {
     console.log("Fetching dashboard totals...");
 
@@ -883,12 +1489,10 @@ SalaryButton.addEventListener("click", () => {
         })
         .then(data => {
             console.log("Data fetched successfully:", data);
-
             // Employee, Manager, and Department Counts
             document.querySelector(".totalEmployees").textContent = `Total Employees: ${data.totalEmployees}`;
             document.querySelector(".totalDepartments").textContent = `Total Departments: ${data.totalDepartments}`;
             document.querySelector(".totalManagers").textContent = `Total Managers: ${data.totalManagers}`;
-
             // Leave Status
             document.getElementById("leaveApplied").textContent = `Leave Applied: ${data.appliedLeaves}`;
             document.getElementById("leaveApproved").textContent = `Leave Approved: ${data.approvedLeaves}`;
@@ -907,7 +1511,6 @@ SalaryButton.addEventListener("click", () => {
 document.addEventListener('DOMContentLoaded', () => {
     // Select the logout button by its ID
     const logoutButton = document.getElementById('logoutBtn');
-
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             // Send a logout request to the backend (if applicable)
@@ -933,7 +1536,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
- 
 
 
 

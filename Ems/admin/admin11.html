@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <ul class="nav">
+        <li>Employee Managment System</li>
+        <li>
+            <ul class="sub-nav">
+                <li>Wellcome</li>
+                <li id="adminName"></li>
+                <li>Admin</li>
+            </ul>
+        </li>
+        <li><button>Log out</button></li>
+    </ul>
+    
+    <ul class="side-bar">
+        <li data-target="dashboard" class="active">Dashboard</li>
+        <li data-target="employees">Employees</li>
+        <li data-target="managers">Managers</li>
+        <li data-target="departments">Departments</li>
+        <li data-target="salary">Salary</li>
+        <li data-target="settings">Settings</li>
+    </ul>
+    <div class="middle_view">
+        <div class="content dashboard">
+        <h1>Dashboard Overview</h1>
+        <div class="overview">
+            <div>Overview 1</div>
+            <div>Overview 2</div>
+            <div>Overview 3</div>
+        </div>
+        <h1>Leave Details</h1>
+        <div class="grid-container">
+            <div>Detail 1</div>
+            <div>Detail 2</div>
+            <div>Detail 3</div>
+            <div>Detail 4</div>
+        </div>
+        <!-- Announcements Section -->
+
+    <div class="announcements" >
+        <h1>Announcements</h1>
+        
+        <!-- Display Existing Announcements -->
+        <div class="announcement-list">
+            <h3>Recent Announcements</h3>
+            <ul id="announcementList">
+                <!-- Dynamic list of announcements will be populated here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Create New Announcement Form -->
+    <div class="create-announcement">
+        <h3>Create a New Announcement</h3>
+        <form id="announcementForm">
+            <label for="announcementTitle">Title:</label>
+            <input type="text" id="announcementTitle" placeholder="Enter title" required>
+            
+            <label for="announcementContent">Content:</label>
+            <textarea id="announcementContent" placeholder="Write your announcement here..." required></textarea>
+            
+            <button type="submit">Post Announcement</button>
+        </form>
+    </div>
+    
+</div>
+
+    <div class="content employees" style="display: none;">
+        <h1>Employees Management</h1>
+        <!-- Employee content here -->
+    </div>
+    <div class="content managers" style="display: none;">
+        <h1>Managers Management</h1>
+        <!-- Managers content here -->
+    </div>
+    <div class="content departments" style="display: none;">
+        <h1>Departments Overview</h1>
+        <!-- Departments content here -->
+    </div>
+    <div class="content salary" style="display: none;">
+        <h1>Salary Details</h1>
+        <!-- Salary content here -->
+    </div>
+    <div class="content settings" style="display: none;">
+        <h1>Change Password</h1>
+        <form id="changePasswordForm">
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" id="currentPassword" placeholder="Enter current password" required>
+
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" placeholder="Enter new password" required>
+
+            <label for="confirmPassword">Confirm New Password:</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+
+            <button type="submit">Change Password</button>
+        </form>
+        <div id="passwordMessage" style="margin-top: 10px;"></div>
+    </div>
+    </div>
+    <script src="/homepage/login.js" defer></script>
+    <script src="admin.js" defer></script>
+
+</body>
+</html>

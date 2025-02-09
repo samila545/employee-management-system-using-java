@@ -9,7 +9,7 @@
 <body>
 <!-- Navigation Bar -->
 <nav>
-    <div class="logo">EMS</div>
+    <img src="/images/emsLogo.jpg" alt="ems logo">
     <ul class="nav-links">
         <li><button id="loginBtn">Login</button></li>
     </ul>
@@ -51,11 +51,23 @@
 <!-- Testimonials Section -->
 <section id="testimonials" class="testimonials">
     <h2>Testimonials</h2>
-    <div class="testimonial">
-        <p>"This system has transformed how we manage our employees!"</p>
-        <h3>- Mesafint Getnet, Manager</h3>
+    <div class="testimonials-container">
+        <div class="testimonial">
+            <p>"This system has transformed how we manage our employees!"</p>
+            <h3>- Mesafint Getnet, Manager</h3>
+        </div>
+        <div class="testimonial">
+            <p>"A game-changer for our HR processes!"</p>
+            <h3>- Selamawit Tadesse, HR Head</h3>
+        </div>
+        <div class="testimonial">
+            <p>"Highly efficient and easy to use!"</p>
+            <h3>- Biniam Alemu, IT Director</h3>
+        </div>
     </div>
 </section>
+
+
 
 <!-- Footer -->
 <footer>
@@ -70,6 +82,7 @@
             <h2>Login</h2>
             <input type="text" id="email" name="email" placeholder="Email" required>
             <input type="password" id="password" name="password" placeholder="Password" required>
+            <p id="loginError" class="error-message"></p>
             <button type="submit">Login</button>
         </form>
     </div>

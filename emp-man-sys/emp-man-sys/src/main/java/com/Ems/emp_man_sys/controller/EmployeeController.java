@@ -11,9 +11,11 @@ import com.Ems.emp_man_sys.model.Employee;
 import com.Ems.emp_man_sys.repository.EmployeeRepository;
 import com.Ems.emp_man_sys.repository.LeaveRecordRepository;
 import org.springframework.web.multipart.MultipartFile;
+import com.Ems.emp_man_sys.repository.DepartmentRepository;
 
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +27,9 @@ public class EmployeeController {
 
     @Autowired
     private LeaveRecordRepository leaveRecordRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @GetMapping("/getEmployees")
     @CrossOrigin(origins = "http://127.0.0.1:5500")
@@ -87,6 +92,9 @@ public class EmployeeController {
         String currentEmployeeEmail = LoginController.loggedinEmail;
         String currentEmployeePassword = LoginController.loggedinPassword;
 
+        System.out.println(currentEmployeeEmail);
+        System.out.println(currentEmployeePassword);
+
         if (currentEmployeeEmail == null) {
             return ResponseEntity.status(401).body("Unauthorized. Please log in.");
         }
@@ -134,6 +142,8 @@ public class EmployeeController {
         employee.setPassword(changePasswordRequest.getNewPassword());
         employeeRepository.save(employee);
 
+        LoginController.loggedinPassword = changePasswordRequest.getNewPassword();
+
         return ResponseEntity.ok().body(Map.of("message", "Password changed successfully."));
     }
 
@@ -172,6 +182,21 @@ public class EmployeeController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/total")
+    @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
+    public ResponseEntity<Map<String, Long>> getEmployeeTotals() {
+        Map<String, Long> totals = new HashMap<>();
+        long totalEmployees = employeeRepository.count();
+        long totalDepartments = departmentRepository.count();
+       /*long totalEmployeesInDepartment = employeeRepository.countEmployeesInDepartment(departmentName); // Custom Query
+        totals.put("totalEmployeesInDepartment", totalEmployeesInDepartment); */
+
+        totals.put("totalEmployees", totalEmployees);
+        totals.put("totalDepartments", totalDepartments);
+
+        return ResponseEntity.ok(totals);
     }
 }
 

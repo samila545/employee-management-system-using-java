@@ -3,12 +3,14 @@ package com.Ems.emp_man_sys.controller;
 import com.Ems.emp_man_sys.model.LeaveRecord;
 import com.Ems.emp_man_sys.repository.LeaveRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 
@@ -89,6 +91,28 @@ public class LeaveController {
             return ResponseEntity.ok(updatedLeave); // Return the updated leave with 200 OK
 
     }
+
+    @PatchMapping("/rejectLeave/{leaveId}")
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
+    public ResponseEntity<LeaveRecord> rejectLeave(@PathVariable Long leaveId) {
+        // Find the leave record by leaveId
+        LeaveRecord leave = leaveRecordRepository.findByLeaveId(leaveId);
+
+        // Check if the leave exists
+        if (leave == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Return 404 if leave not found
+        }
+
+        // Update the status to 'Rejected'
+        leave.setStatus("Rejected");
+
+        // Save the updated leave
+        LeaveRecord updatedLeave = leaveRecordRepository.save(leave);
+
+        // Return the updated leave with 200 OK
+        return ResponseEntity.ok(updatedLeave);
+    }
+
 
 
 

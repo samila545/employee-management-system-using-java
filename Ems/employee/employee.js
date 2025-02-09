@@ -390,6 +390,7 @@ changePasswordForm.addEventListener('submit', (e) => {
 
 })
 
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Fetching dashboard totals...");
 
@@ -407,15 +408,13 @@ document.addEventListener("DOMContentLoaded", function () {
             // Update the HTML elements with the fetched data
             document.querySelector(".totalEmployees").textContent = `Total Employees: ${data.totalEmployees}`;
             document.querySelector(".totalDepartments").textContent = `Total Departments: ${data.totalDepartments}`;
-         
         })
         .catch(error => {
             console.error("Error fetching dashboard totals:", error);
         });
 });
 
-
-// Function to fetch employees in a specific department (pass department ID)
+// Function to fetch employees in a specific department
 function fetchEmployeesInDepartment(departmentId) {
     fetch(`http://localhost:8080/api/employees/total/${departmentId}`)
         .then(response => response.json())
@@ -431,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
-            // Send a logout request to the backend (if applicable)
+            // Send a logout request to the backend
             fetch('http://localhost:8080/logout', { 
                 method: 'POST',
                 credentials: 'include' 
@@ -445,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error during logout:', error);
-                // Optionally, you can force redirect even if logout fails
+                // Optionally, redirect even if logout fails
                 window.location.href = '/homepage/home.html';
             });
         });
@@ -453,4 +452,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Logout button not found');
     }
 });
-

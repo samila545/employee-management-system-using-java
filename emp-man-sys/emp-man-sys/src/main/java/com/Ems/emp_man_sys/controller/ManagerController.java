@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.Ems.emp_man_sys.repository.LeaveRecordRepository;
+import com.Ems.emp_man_sys.repository.DepartmentRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,18 +24,32 @@ public class ManagerController {
     private ManagerRepository managerRepository;
 
     @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
     private LeaveRecordRepository leaveRecordRepository;
 
 
-    // Endpoint to get all managers
     @GetMapping("/getManagers")
     @CrossOrigin(origins = "http://127.0.0.1:5500")
     public List<Manager> getManagers() {
-        return managerRepository.findAll();
+        List<Manager> managers = managerRepository.findAll();
+
+
+        return managers;
     }
+
+    @GetMapping("/managers/{managerId}")
+    public ResponseEntity<Manager> getManagerById(@PathVariable Long managerId) {
+        System.out.println("Fetching manager with ID: " + managerId);
+        return managerRepository.findByManagerId(managerId)
+                .map(manager -> new ResponseEntity<>(manager, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 
     @GetMapping("/getProfileofManager")
     @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
@@ -51,11 +67,25 @@ public class ManagerController {
         // Fetch admin data from the database
         Manager manager = managerRepository.findByEmailAddressAndPassword(currentManagerEmail, currentManagerPassword);
         System.out.println(manager.getManagerId());
+        System.out.println(manager.getImagePath());
 
 
 
         // Return profile data
         return ResponseEntity.ok(manager);
+    }
+
+    @DeleteMapping("/managers/{id}")
+    @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
+    public ResponseEntity<Void> deleteManager(@PathVariable Long id) {
+
+
+
+        if (managerRepository.existsById(id)) {
+            managerRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/updateToManager")
@@ -120,6 +150,34 @@ public class ManagerController {
         return ResponseEntity.ok(employees);
     }
 
+    @PutMapping("/managers/{id}")
+    @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
+    public ResponseEntity<Manager> updateManager(@PathVariable Long id, @RequestBody Manager updateManager) {
+        return managerRepository.findById(id).map(manager -> {
+
+            System.out.println(updateManager.getDateOfJoining());
+            // Update manager details
+            manager.setFirstName(updateManager.getFirstName());
+            manager.setLastName(updateManager.getLastName());
+            manager.setPhoneNumber(updateManager.getPhoneNumber());
+            manager.setDateOfBirth(updateManager.getDateOfBirth());
+            manager.setGender(updateManager.getGender());
+            manager.setEmailAddress(updateManager.getEmailAddress());
+            manager.setDepartment(updateManager.getDepartment());
+            manager.setRole(updateManager.getRole());
+            manager.setPosition(updateManager.getPosition());
+            manager.setPassword(updateManager.getPassword());
+            manager.setDateOfJoining(updateManager.getDateOfJoining());
+            manager.setSalary(updateManager.getSalary());
+            manager.setImagePath(updateManager.getImagePath());  // Corrected field name
+
+            // Save updated manager
+            Manager savedManager = managerRepository.save(manager);
+            return ResponseEntity.ok(savedManager);
+        }).orElse(ResponseEntity.notFound().build());  // Handle case where manager is not found
+    }
+
+
 
     @PostMapping("/changeManagerPassword")
     @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
@@ -153,7 +211,26 @@ public class ManagerController {
         manager.setPassword(changePasswordRequest.getNewPassword());
         managerRepository.save(manager);
 
+        LoginController.loggedinPassword = changePasswordRequest.getNewPassword();
+
         return ResponseEntity.ok().body(Map.of("message", "Password changed successfully."));
     }
 
+    @GetMapping("/totalss")
+    @CrossOrigin(origins = "http://127.0.0.1:5500", allowCredentials = "true")
+    public ResponseEntity<Map<String, Long>> getEmployeeTotals() {
+        Map<String, Long> totals = new HashMap<>();
+        long totalEmployees = employeeRepository.count();
+        long totalDepartments = departmentRepository.count();
+
+
+        totals.put("totalEmployees", totalEmployees);
+        totals.put("totalDepartments", totalDepartments);
+
+        return ResponseEntity.ok(totals);
+    }
+
+
 }
+
+
